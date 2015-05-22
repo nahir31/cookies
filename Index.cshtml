@@ -1,0 +1,52 @@
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+</head>
+<body>
+
+    @using (Html.BeginForm("SaveToTemporaryCookie", "Home"))
+    {
+        <div><span>Name:</span>@Html.TextBox("Name1")</div>
+        <div><span>Password:</span>@Html.Password("Password1")</div>
+        <div><input type="submit" value="Save details until next application server restart"></div>
+    }
+    
+    <br />
+    
+    <h2>@Html.ActionLink("Read Details From Temporary Cookie", "ReadTempCookie", "Home")</h2>
+    <div><span>Name:</span>@ViewBag.NameFromTempCookie</div>
+    <div><span>Password:</span>@ViewBag.PasswordFromTempCookie</div>
+
+    <br /><br />
+    ******************************************************
+    <br /><br />
+
+    @using (Html.BeginForm("SaveToOneMinuteCookie", "Home"))
+    {
+        <div><span>Name:</span>@Html.TextBox("Name2")</div>
+        <div><span>Password:</span>@Html.Password("Password2")</div>
+        <div><h2><input type="submit" value="Save Details For 1 minute"></h2></div>
+    }
+
+    <br />
+
+    <h2>@Html.ActionLink("Read Details From One Minute Cookie", "ReadOneMinuteCookie", "Home")</h2>
+    <div><span>Name:</span>@ViewBag.NameFromOneMinuteCookie</div>
+    <div><span>Password:</span>@ViewBag.PasswordFromOneMinuteCookie</div>
+
+    <br /><br />
+    ******************************************************
+    <br /><br />
+
+    <div><h2>@Html.ActionLink("Delete Both Cookies", "DeleteCookies", "Home")</h2></div>
+
+</body>
+</html>
