@@ -1,0 +1,106 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+
+namespace CookieTutorial.Controllers
+{
+    public class HomeController : Controller
+    {
+        // GET: Home
+        public ActionResult Index()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult SaveToTemporaryCookie()
+        {
+            string userName = Request["Name1"];
+            string password = Request["Password1"];
+
+            HttpCookie cookie = new HttpCookie("UserDetailsTemp");
+            cookie["UserName"] = userName;
+            cookie["UserPassword"] = password;
+            Response.Cookies.Add(cookie);
+
+            return View("Index");
+        }
+
+        public ActionResult ReadTempCookie()
+        {
+            HttpCookie cookie = Request.Cookies["UserDetailsTemp"];
+
+            if (cookie != null)
+            {
+                ViewBag.NameFromTempCookie = cookie["UserName"];
+                ViewBag.PasswordFromTempCookie = cookie["UserPassword"];
+            }
+            else
+            {
+                ViewBag.NameFromTempCookie = "<Unknown>";
+                ViewBag.PasswordFromTempCookie = "<Unknown>";
+            }
+
+            return View("Index");
+        }
+
+        [HttpPost]
+        public ActionResult SaveToOneMinuteCookie()
+        {
+            string userName = Request["Name2"];
+            string password = Request["Password2"];
+
+            HttpCookie cookie = new HttpCookie("UserDetailsOneMinute");
+            cookie["UserName"] = userName;
+            cookie["UserPassword"] = password;
+            cookie.Expires = DateTime.Now.AddMinutes(1);
+            Response.Cookies.Add(cookie);
+
+            return View("Index");
+        }
+
+        public ActionResult ReadOneMinuteCookie()
+        {
+            HttpCookie cookie = Request.Cookies["UserDetailsOneMinute"];
+
+            if (cookie != null)
+            {
+                ViewBag.NameFromOneMinuteCookie = cookie["UserName"];
+                ViewBag.PasswordFromOneMinuteCookie = cookie["UserPassword"];
+            }
+            else
+            {
+                ViewBag.NameFromOneMinuteCookie = "<Unknown>";
+                ViewBag.PasswordFromOneMinuteCookie = "<Unknown>";
+            }
+
+            return View("Index");
+        }
+
+        public ActionResult DeleteCookies()
+        {
+            HttpCookie cookie1 = Request.Cookies["UserDetailsTemp"];
+            HttpCookie cookie2 = Request.Cookies["UserDetailsOneMinute"];
+
+            if (cookie1 != null)
+            {
+                cookie1["UserName"] = "?";
+                cookie1["UserPassword"] = "?";
+                cookie1.Expires = DateTime.Now.AddDays(-1);
+                Response.Cookies.Add(cookie1);
+            }
+
+            if (cookie2 != null)
+            {
+                cookie2["UserName"] = "?";
+                cookie2["UserPassword"] = "?";
+                cookie2.Expires = DateTime.Now.AddDays(-1);
+                Response.Cookies.Add(cookie2);
+            }
+
+            return View("Index");
+        }
+    }
+}
